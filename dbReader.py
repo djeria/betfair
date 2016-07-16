@@ -11,19 +11,12 @@ class SqlServer:
     def close(self):
         self.db.close()
 
-    def get_runners_table(self, market_id):
+    def get_quotes_table(self, market_id, runner_name):
         self.cursor.execute('''
-            SELECT * from runners
-            where marketId=%d
-        ''' % (market_id,))
-        return self.cursor.fetchall()
-
-    def get_quotes_table(self, market_id, runner_id):
-        self.cursor.execute('''
-            SELECT * from markets
-            where marketId=%d
-            and runnerId=%d
-        ''' % (market_id, runner_id))
+            SELECT * from quotes
+            where marketId='%s'
+            and runnerName='%s'
+        ''' % (market_id, runner_name))
         return self.cursor.fetchall()
 
     def get_quotes(self, market_id, runner_id):

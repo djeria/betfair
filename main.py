@@ -1,11 +1,11 @@
 import sys
 import time
 import logging
-from dataCollector import collector
+from dataCollector import DataCollector
 
 logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
 
-collector.init('114565432')
+collector = DataCollector('1.125604886')
 
 while True:
     try:

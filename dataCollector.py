@@ -34,23 +34,27 @@ class DataCollector:
     @staticmethod
     def get_quote(runner):
         quote = {
-            'runnerId': runner['description']['runnerName'],
+            'runnerName': runner['description']['runnerName'],
             'bestBacks': runner['exchange']['availableToBack'],
             'bestLays': runner['exchange']['availableToLay'],
         }
 
         return quote
 
-    def save_market(self, market):
+    def save_quotes(self, market):
         for runner in market['runners']:
             quote = self.get_quote(runner)
 
             self.db.insert_quote(
                 self.market_id,
-                quote['runnerId'],
+                quote['runnerName'],
                 quote['bestBacks'][0]['price'],
                 quote['bestBacks'][0]['size'],
                 quote['bestLays'][0]['price'],
                 quote['bestLays'][0]['size'],
                 datetime.datetime.now()
             )
+
+    def run(self):
+        market = self.get_market()
+        self.save_quotes(market)

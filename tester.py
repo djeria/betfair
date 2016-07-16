@@ -4,25 +4,22 @@ import dbReader
 import requests
 import json
 
-collector = DataCollector('1.125604886')
+# collector = DataCollector('1.125604886')
+# collector.run();
 
-market = collector.get_market();
-
-for runner in market['runners']:
-    quote = collector.get_quote(runner)
-
-    print quote
-
-
-# dbWriter.handle.drop_table('markets')
-# dbWriter.handle.create_markets_table()
 #
-# dbWriter.handle.drop_table('runners')
-# dbWriter.handle.create_runners_table()
+# market = collector.get_market();
+#
+# for runner in market['runners']:
+#     quote = collector.get_quote(runner)
+#
+#     print quote['runnerId'] + ': ' + str(quote['bestBacks'][0]['price'])
 
-# time, back, lay = dbReader.handle.get_quotes(114549309, 67779631)
+# dbWriter.handle.drop_table('quotes')
+# dbWriter.handle.create_quotes_table()
+# dbWriter.handle.clear_quotes_table()
 
-# print dbReader.handle.get_runners_table(103163147)
+# print dbReader.handle.get_quotes_table('1.125604886', 'The Draw')
 
 # url = 'http://uk-api.betfair.com/www/sports/exchange/readonly/v1.0/bymarket'
 # params = {
