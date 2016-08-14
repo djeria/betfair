@@ -1,6 +1,6 @@
 import sqlite3
 from datetime import datetime
-
+from tabulate import tabulate
 
 class SqlServer:
 
@@ -10,6 +10,19 @@ class SqlServer:
 
     def close(self):
         self.db.close()
+
+    def get_stored_markets(self):
+        self.cursor.execute('''
+            SELECT distinct
+                DATE(time),
+                marketId,
+                runnerName
+            from quotes''')
+        return self.cursor.fetchall()
+
+    def show_stored_markets(self):
+        markets = self.get_stored_markets()
+        print tabulate(markets, headers=["Date", "Market Id", "Runner"], floatfmt=".9f")
 
     def get_quotes_table(self, market_id, runner_name):
         self.cursor.execute('''
