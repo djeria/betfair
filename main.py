@@ -5,12 +5,14 @@ from dataCollector import DataCollector
 
 logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
 
-collector = DataCollector('1.125604886')
+collector = DataCollector('1.125246976')
 
 while True:
     try:
         collector.run()
-        time.sleep(10)
-    except:
-        e = sys.exc_info()[0]
-        logging.ERROR(e)
+        time.sleep(5)
+    except RuntimeError, e:
+        print "Runtime error: " + str(e)
+        sys.exit()
+    except Exception, e:
+        print "Unexpected error: " + str(e)

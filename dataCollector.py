@@ -19,7 +19,7 @@ class DataCollector:
             'marketIds': self.market_id
         }
 
-        resp = requests.get(self.url, params=params)
+        resp = requests.get(self.url, params=params, timeout=10)
 
         if resp.ok:
             market = resp.text.replace('while(1) {};\n', '')
@@ -52,9 +52,13 @@ class DataCollector:
                 quote['bestBacks'][0]['size'],
                 quote['bestLays'][0]['price'],
                 quote['bestLays'][0]['size'],
-                datetime.datetime.now()
+                datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3],
             )
 
     def run(self):
         market = self.get_market()
+
+        if market['state']['status']=='CLOSED':
+            raise RuntimeError('The market is closed')
+
         self.save_quotes(market)
