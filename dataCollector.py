@@ -2,6 +2,7 @@ import requests
 import json
 import datetime
 import dbWriter
+import logging
 
 
 class DataCollector:
@@ -10,6 +11,7 @@ class DataCollector:
         self.db = dbWriter.handle
         self.url = 'http://uk-api.betfair.com/www/sports/exchange/readonly/v1.0/bymarket'
         self.market_id = market_id
+        self.session = requests.session()
 
     def get_market(self):
         params = {
@@ -19,15 +21,17 @@ class DataCollector:
             'marketIds': self.market_id
         }
 
-        resp = requests.get(self.url, params=params, timeout=10)
+        try:
+            logging.info('Fetching market from betfair')
+            resp = self.session.get(self.url, params=params, timeout=10)
+        except requests.exceptions.RequestException, e:
+            raise Exception('Received request exception: %s' % str(e))
 
         if resp.ok:
             market = resp.text.replace('while(1) {};\n', '')
             market = json.loads(market)
             market = market['eventTypes'][0]['eventNodes'][0]['marketNodes'][0]
-
             return market
-
         else:
             raise Exception('Received invalid response status code %s' % resp.status_code)
 
@@ -47,6 +51,7 @@ class DataCollector:
 
             self.db.insert_quote(
                 self.market_id,
+                market['state']['status'],
                 quote['runnerName'],
                 quote['bestBacks'][0]['price'],
                 quote['bestBacks'][0]['size'],

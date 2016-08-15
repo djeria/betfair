@@ -21,6 +21,7 @@ class SqlServer:
         self.cursor.execute('''
             CREATE TABLE quotes(
                 marketId STRING,
+                marketState STRING,
                 runnerName STRING,
                 bestBackPrice REAL,
                 bestBackSize REAL,
@@ -30,19 +31,20 @@ class SqlServer:
             ''')
         self.commit()
 
-    def insert_quote(self, market_id, runner_name, best_back_price,
+    def insert_quote(self, market_id, market_state, runner_name, best_back_price,
                       best_back_size, best_lay_price, best_lay_size, time):
         self.cursor.execute('''
             INSERT INTO quotes(
                 marketId,
+                marketState,
                 runnerName,
                 bestBackPrice,
                 bestBackSize,
                 bestLayPrice,
                 bestLaySize,
                 time)
-            VALUES(?, ?, ?, ?, ?, ?, ?)
-        ''', (market_id, runner_name, best_back_price, best_back_size,
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (market_id, market_state, runner_name, best_back_price, best_back_size,
               best_lay_price, best_lay_size, time))
         self.commit()
 

@@ -6,6 +6,7 @@ class SqlServer:
 
     def __init__(self):
         self.db = sqlite3.connect('D:/data/market.db')
+        self.db.row_factory = sqlite3.Row
         self.cursor = self.db.cursor()
 
     def close(self):
@@ -28,12 +29,13 @@ class SqlServer:
         self.cursor.execute('''
             SELECT
                 marketId,
+                marketState,
                 runnerName,
                 bestBackPrice,
                 bestBackSize,
                 bestLayPrice,
                 bestLaySize,
-                strftime('%%Y-%%m-%%d %%H:%%M:%%S', time)
+                strftime('%%Y-%%m-%%d %%H:%%M:%%S', time) as time
             from quotes
             where marketId='%s'
             and runnerName='%s'
@@ -52,11 +54,12 @@ class SqlServer:
         lay_size = []
 
         for quote in self.get_quotes_table(market_id, runner_name):
-            time.append(datetime.strptime(quote[6], '%Y-%m-%d %H:%M:%S'))
-            back_price.append(quote[2])
-            back_size.append(quote[3])
-            lay_price.append(quote[4])
-            lay_size.append(quote[5])
+            if quote['marketState']=='OPEN':
+                time.append(datetime.strptime(quote['time'], '%Y-%m-%d %H:%M:%S'))
+                back_price.append(quote['bestBackPrice'])
+                back_size.append(quote['bestBackSize'])
+                lay_price.append(quote['bestLayPrice'])
+                lay_size.append(quote['bestLaySize'])
 
         quotes = {
             'time': time,
