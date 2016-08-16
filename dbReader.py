@@ -1,16 +1,18 @@
 import sqlite3
 from datetime import datetime
 from tabulate import tabulate
+from ConfigParser import SafeConfigParser
+
 
 class SqlServer:
 
-    def __init__(self):
-        self.db = sqlite3.connect('D:/data/market.db')
-        self.db.row_factory = sqlite3.Row
-        self.cursor = self.db.cursor()
+    def __init__(self, db):
+        self.db_conn = sqlite3.connect(db)
+        self.db_conn.row_factory = sqlite3.Row
+        self.cursor = self.db_conn.cursor()
 
     def close(self):
-        self.db.close()
+        self.db_conn.close()
 
     def get_stored_markets(self):
         self.cursor.execute('''
@@ -71,4 +73,9 @@ class SqlServer:
 
         return quotes
 
-handle = SqlServer()
+config = SafeConfigParser()
+config.read('config.ini')
+
+local_db = config.get('main', 'db')
+
+handle = SqlServer(local_db)
