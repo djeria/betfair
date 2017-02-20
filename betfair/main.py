@@ -1,8 +1,10 @@
+import logging
 import sys
 import time
-import logging
-from multiprocessing import Pool
-from dataCollector import DataCollector
+import multiprocessing
+
+from betfair.dataCollector import DataCollector
+
 
 def collect_betfair_data(market_id):
     logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
@@ -13,17 +15,17 @@ def collect_betfair_data(market_id):
         try:
             collector.run()
             time.sleep(5)
-        except RuntimeError, e:
+        except RuntimeError as e:
             logging.exception("Runtime error")
             sys.exit()
-        except Exception, e:
+        except Exception as e:
             logging.exception("Unexpected error")
 
 if __name__ == "__main__":
     markets = [
-        '1.125246985',
-        '1.125800676',
+        '1.129426476',
+        '1.129639772',
     ]
 
-    pool = Pool(4)
+    pool = multiprocessing.Pool(2)
     pool.map(collect_betfair_data, markets)

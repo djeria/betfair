@@ -1,8 +1,8 @@
-import requests
-import json
 import datetime
-import dbWriter
+import json
 import logging
+import requests
+from betfair import dbWriter
 
 
 class DataCollector:
@@ -24,7 +24,7 @@ class DataCollector:
         try:
             logging.info('Fetching market %s from betfair' % self.market_id)
             resp = self.session.get(self.url, params=params, timeout=10)
-        except requests.exceptions.RequestException, e:
+        except requests.exceptions.RequestException as e:
             raise Exception('Received request exception: %s' % str(e))
 
         if resp.ok:

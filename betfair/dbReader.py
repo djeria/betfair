@@ -1,7 +1,7 @@
 import sqlite3
 from datetime import datetime
+from configparser import ConfigParser
 from tabulate import tabulate
-from ConfigParser import SafeConfigParser
 
 
 class SqlServer:
@@ -56,7 +56,7 @@ class SqlServer:
         lay_size = []
 
         for quote in self.get_quotes_table(market_id, runner_name):
-            if quote['marketState']=='OPEN':
+            if quote['marketState'] == 'OPEN':
                 time.append(datetime.strptime(quote['time'], '%Y-%m-%d %H:%M:%S'))
                 back_price.append(quote['bestBackPrice'])
                 back_size.append(quote['bestBackSize'])
@@ -73,7 +73,7 @@ class SqlServer:
 
         return quotes
 
-config = SafeConfigParser()
+config = ConfigParser()
 config.read('config.ini')
 
 local_db = config.get('main', 'db')

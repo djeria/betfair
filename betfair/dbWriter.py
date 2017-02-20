@@ -1,5 +1,5 @@
 import sqlite3
-from ConfigParser import SafeConfigParser
+from configparser import SafeConfigParser
 
 
 class SqlServer:
